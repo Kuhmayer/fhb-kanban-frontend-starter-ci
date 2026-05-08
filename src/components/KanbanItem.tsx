@@ -39,7 +39,7 @@ function KanbanItem({ item, onSave, onCancel }: KanbanItemProps) {
   useEffect(() => {
     if (item) {
       // Populate form fields if item prop is provided (editing)
-      setItemData({
+      (async () => {setItemData({
         title: item.title,
         description: item.description,
         type: item.type,
@@ -47,10 +47,10 @@ function KanbanItem({ item, onSave, onCancel }: KanbanItemProps) {
         state: item.state,
         assigned_user: item.assigned_user,
         priority: item.priority,
-      });
+      }); })();
     } else {
       // Clear form fields if no item prop (creating new)
-      setItemData({
+      (async () => {setItemData({
         title: '',
         description: '',
         type: 'User Story',
@@ -58,7 +58,7 @@ function KanbanItem({ item, onSave, onCancel }: KanbanItemProps) {
         state: 'Open',
         assigned_user: '',
         priority: 'Low',
-      });
+      });})()
     }
   }, [item]);
 
@@ -135,9 +135,9 @@ function KanbanItem({ item, onSave, onCancel }: KanbanItemProps) {
       toast.success(`Item ${item ? 'updated' : 'created'} successfully!`);
       onSave(); // Notify parent component to refresh/close form
 
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error('Error saving item:', error);
-      toast.error(`Failed to save item: ${error.message}`);
+      toast.error(`Failed to save item: ${(error as Error).message}`);
     }
   };
 
